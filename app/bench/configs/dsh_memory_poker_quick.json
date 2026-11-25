@@ -1,0 +1,23 @@
+﻿{
+    "system":  {
+                   "name":  "dsh_memory",
+                   "params":  {
+                                  "model":  "openai/deepseek-v4.1-flash",
+                                  "judge_model":  "openai/deepseek-v4.1-flash",
+                                  "api_base":  "https://opencode.ai/inference/go/v1",
+                                  "wiki_min_sessions":  3,
+                                  "wiki_min_workspaces":  2,
+                                  "wiki_max_ratio":  0.7,
+                                  "keep_history":  false
+                              }
+               },
+    "task":  {
+                 "name":  "exploitable_poker",
+                 "params":  {
+                                "schedule":  "quick_test"
+                            }
+             },
+    "runs":  1,
+    "max_workers":  1,
+    "run_mode":  "replicate"
+}

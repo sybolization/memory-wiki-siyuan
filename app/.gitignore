@@ -1,0 +1,14 @@
+﻿# large/generated artifacts
+_scratch/
+.tmp/
+node_modules/
+**/__pycache__/
+bench/poke/.venv/
+bench/poke/rom/
+bench/poke/rom_gbc/
+bench/poke/runs/
+bench/poke/states/
+bench/poke/archive/
+bench/logs/
+*.pyc
+*.log

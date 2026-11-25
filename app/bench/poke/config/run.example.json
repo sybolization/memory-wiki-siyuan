@@ -1,0 +1,10 @@
+{
+  "run": "gbc_map_01",
+  "port": 8765,
+  "state": "start",
+  "objective": "Reach Cerulean City and defeat Misty.",
+  "max_actions": 5000,
+  "dream_every_actions": 50,
+  "rom": "rom/pokered.gbc",
+  "sym": "rom/pokered.sym"
+}

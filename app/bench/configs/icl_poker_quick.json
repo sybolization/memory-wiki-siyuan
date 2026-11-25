@@ -1,0 +1,18 @@
+{
+  "system": {
+    "name": "icl",
+    "params": {
+      "model": "openai/deepseek-v4.1-flash",
+      "provider_mode": "litellm_chat"
+    }
+  },
+  "task": {
+    "name": "exploitable_poker",
+    "params": {
+      "schedule": "quick_test"
+    }
+  },
+  "runs": 1,
+  "max_workers": 1,
+  "run_mode": "replicate"
+}

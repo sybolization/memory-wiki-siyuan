@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pokémon Red · live</title>
+<style>
+:root {
+  color-scheme: light;
+  --surface: #F7F7F8;
+  --surface-muted: #EFEFF2;
+  --text: #171717;
+  --text-muted: #52525B;
+  --border: rgba(23, 23, 23, 0.12);
+  --brand: #0FDC78;
+  --brand-soft: #E5FFF2;
+  --brand-soft-strong: #B4FDD9;
+  --brand-text: #004D26;
+  --chart-series-1: #02743B;
+  --chart-series-4: #80C1FF;
+  --danger: #E8463A;
+  --radius: 8px;
+  --radius-card: 12px;
+  --radius-full: 999px;
+  --spacer-4: 4px;
+  --spacer-8: 8px;
+  --spacer-12: 12px;
+  --spacer-16: 16px;
+  --spacer-20: 20px;
+  --spacer-24: 24px;
+  --font-sans: "SF Pro Text", "PingFang SC", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-strong: 600;
+  --text-caption: 12px/18px;
+  --text-body: 14px/20px;
+  --text-title: 16px/24px;
+  --text-code: 13px/20px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --surface: #171717;
+    --surface-muted: #262626;
+    --text: #E5E5E5;
+    --text-muted: #A1A1AA;
+    --border: rgba(229, 229, 229, 0.12);
+    --brand: #32F08C;
+    --brand-soft: #004D26;
+    --brand-soft-strong: #02743B;
+    --brand-text: #E5FFF2;
+    --chart-series-1: #32F08C;
+    --chart-series-4: #64B4FF;
+  }
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--surface-muted);
+  color: var(--text);
+  font: var(--weight-regular) var(--text-body) var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+.app { max-width: 1180px; margin: 0 auto; padding: var(--spacer-16); display: flex; flex-direction: column; gap: var(--spacer-12); }
+.bar { display: flex; align-items: center; gap: var(--spacer-12); flex-wrap: wrap; }
+.bar h1 { margin: 0; font: var(--weight-strong) var(--text-title) var(--font-sans); letter-spacing: -0.01em; }
+.chips { display: flex; gap: var(--spacer-8); flex-wrap: wrap; }
+.chip {
+  font: var(--weight-medium) var(--text-caption) var(--font-mono);
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 2px 10px;
+}
+.chip b { color: var(--text); font-weight: var(--weight-strong); }
+.chip.on { color: var(--brand-text); background: var(--brand-soft); border-color: transparent; }
+
+.grid { display: grid; grid-template-columns: 480px minmax(0, 1fr); gap: var(--spacer-16); align-items: start; }
+@media (max-width: 980px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+.card-h {
+  display: flex; align-items: baseline; gap: var(--spacer-8);
+  padding: var(--spacer-12) var(--spacer-16);
+  border-bottom: 1px solid var(--border);
+  font: var(--weight-strong) var(--text-caption) var(--font-sans);
+  color: var(--text-muted); letter-spacing: .04em; text-transform: uppercase;
+}
+.card-h .sub { font: var(--weight-regular) var(--text-caption) var(--font-mono); color: var(--text-muted); text-transform: none; letter-spacing: 0; }
+#s { display: block; width: 480px; height: 432px; image-rendering: pixelated; background: #000; }
+.metrics { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--border); }
+.metric { padding: var(--spacer-12) var(--spacer-16); border-right: 1px solid var(--border); }
+.metric:last-child { border-right: 0; }
+.metric .k { font: var(--weight-regular) var(--text-caption) var(--font-sans); color: var(--text-muted); }
+.metric .v { font: var(--weight-strong) var(--text-title) var(--font-mono); margin-top: 2px; }
+
+#t { height: calc(100vh - 210px); min-height: 420px; overflow-y: auto; padding: var(--spacer-12); display: flex; flex-direction: column; gap: var(--spacer-8); }
+#t::-webkit-scrollbar { width: 10px; }
+#t::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--radius-full); }
+
+details.turn { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-muted); }
+details.turn[open] { background: var(--surface); }
+details.turn > summary {
+  cursor: pointer; list-style: none; padding: var(--spacer-8) var(--spacer-12);
+  display: flex; align-items: center; gap: var(--spacer-8);
+  font: var(--weight-medium) var(--text-code) var(--font-sans);
+}
+details.turn > summary::-webkit-details-marker { display: none; }
+details.turn > summary .num { color: var(--brand-text); background: var(--brand-soft); border-radius: var(--radius-full); padding: 1px 8px; font: var(--weight-strong) var(--text-caption) var(--font-mono); }
+details.turn > summary .prev { color: var(--text-muted); font: var(--weight-regular) var(--text-caption) var(--font-sans); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+details.turn .body { padding: 0 var(--spacer-12) var(--spacer-12); display: flex; flex-direction: column; gap: var(--spacer-8); }
+
+details.sub { border-left: 2px solid var(--border); padding-left: var(--spacer-12); }
+details.sub > summary { cursor: pointer; list-style: none; font: var(--weight-medium) var(--text-caption) var(--font-mono); color: var(--text-muted); }
+details.sub > summary::-webkit-details-marker { display: none; }
+details.sub > summary:hover { color: var(--text); }
+details.sub .it { margin-top: 6px; }
+
+.it { font: var(--weight-regular) var(--text-code) var(--font-mono); white-space: pre-wrap; word-break: break-word; }
+.thinking .it { color: var(--text-muted); font-style: italic; }
+.tool > summary { color: var(--chart-series-1); }
+.tool .it { color: var(--text); }
+.result > summary { color: var(--text-muted); }
+.result .it { color: var(--text-muted); font-size: var(--text-caption); }
+.text-row { display: flex; gap: var(--spacer-8); font: var(--weight-regular) var(--text-body) var(--font-sans); }
+.text-row .ico { opacity: .55; flex: none; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="bar">
+    <h1>Pokémon Red · live</h1>
+    <div class="chips" id="chips"><span class="chip">connecting…</span></div>
+  </div>
+  <div class="grid">
+    <section class="card">
+      <div class="card-h">Game <span class="sub" id="gameSub"></span></div>
+      <img id="s" alt="game screen">
+      <div class="metrics">
+        <div class="metric"><div class="k">map</div><div class="v" id="m-map">—</div></div>
+        <div class="metric"><div class="k">position</div><div class="v" id="m-pos">—</div></div>
+        <div class="metric"><div class="k">badges</div><div class="v" id="m-badges">—</div></div>
+      </div>
+    </section>
+    <section class="card">
+      <div class="card-h">Agent <span class="sub">thinking · replies · tool calls</span></div>
+      <div id="t"></div>
+    </section>
+  </div>
+</div>
+<script>
+let lastSeq = -1, lastCount = -1, run = (new URLSearchParams(location.search).get("run") || ""), timer = null;
+const T = document.getElementById("t"), IMG = document.getElementById("s");
+const $ = (id) => document.getElementById(id);
+const esc = (s) => (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+async function playAnim(seq) {
+  try {
+    const d = await (await fetch("/anim.json?seq=" + seq)).json();
+    if (!d.frames || !d.frames.length) {
+      // The frame buffer is only filled by captured presses; before the first one
+      // (or in the gap between ticks) fall back to the current static frame.
+      if (!IMG.getAttribute("src")) IMG.src = "/screen.png?t=" + Date.now();
+      return;
+    }
+    if (timer) clearInterval(timer);
+    let i = 0; IMG.src = d.frames[0];
+    timer = setInterval(() => {
+      i++;
+      if (i >= d.frames.length) { clearInterval(timer); timer = null; return; }
+      IMG.src = d.frames[i];
+    }, 32);
+  } catch (e) {}
+}
+
+function itemHtml(it) {
+  if (it.kind === "thinking") {
+    const n = it.text.length;
+    return '<details class="sub thinking"><summary>💭 thinking · ' + n + ' chars</summary><div class="it">' + esc(it.text) + "</div></details>";
+  }
+  if (it.kind === "text") {
+    return '<div class="text-row"><span class="ico">💬</span><div class="it" style="white-space:pre-wrap;font-family:var(--font-sans);font-size:var(--text-body)">' + esc(it.text) + "</div></div>";
+  }
+  if (it.kind === "tool") {
+    const short = it.text.length > 90 ? it.text.slice(0, 90) + "…" : it.text;
+    return '<details class="sub tool"><summary>🔧 ' + esc(it.name) + " " + esc(short) + '</summary><div class="it">' + esc(it.text) + "</div></details>";
+  }
+  const pre = (it.text || "").split("\n")[0].slice(0, 100);
+  return '<details class="sub result"><summary>↳ ' + esc(it.name) + " · " + esc(pre) + '</summary><div class="it">' + esc(it.text) + "</div></details>";
+}
+
+function renderTurns(turns) {
+  T.innerHTML = turns.map((tn, idx) => {
+    const open = idx === turns.length - 1 ? " open" : "";
+    const preview = tn.items.map((i) => i.kind === "text" ? i.text : i.kind === "tool" ? i.name : "").filter(Boolean).join(" / ").slice(0, 70);
+    return '<details class="turn"' + open + '><summary><span class="num">T' + tn.turn + "</span><span>" + tn.items.length + " items</span>" + (preview ? '<span class="prev">· ' + esc(preview) + "</span>" : "") + "</summary><div class=\"body\">" + tn.items.map(itemHtml).join("") + "</div></details>";
+  }).join("");
+}
+
+async function tick() {
+  try {
+    const st = await (await fetch("/observe")).json();
+    $("m-map").textContent = st.map;
+    $("m-pos").textContent = "(" + st.x + "," + st.y + ")";
+    $("m-badges").textContent = st.badges.length ? st.badges.join(",") : "—";
+    $("gameSub").textContent = "frame " + st.frames;
+    $("chips").innerHTML =
+      '<span class="chip">frames <b>' + st.frames + "</b></span>" +
+      '<span class="chip">party <b>' + st.party_count + "</b></span>" +
+      '<span class="chip">money <b>' + st.money + "</b></span>" +
+      (st.battle ? '<span class="chip on">BATTLE</span>' : "");
+    if (st.frames !== lastSeq) { lastSeq = st.frames; IMG.src = "/screen.png?t=" + st.frames; }
+    const tr = await (await fetch("/transcript" + (run ? "?run=" + run : ""))).json();
+    if (tr.run) run = tr.run;
+    document.title = "Pokémon Red · live" + (run ? " · " + run : "");
+    if (tr.total !== lastCount) { lastCount = tr.total; renderTurns(tr.turns || []); }
+  } catch (e) {
+    $("chips").innerHTML = '<span class="chip">offline · ' + esc(String(e)) + "</span>";
+  }
+}
+setInterval(tick, 450); tick();
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "run": "gbc_map_15",
+  "port": 8765,
+  "state": "gbc_map11_start",
+  "objective": "Starting at the Mt Moon entrance, re-explore Mt Moon from scratch and continue toward Cerulean City and Misty.",
+  "max_actions": 1500,
+  "dream_every_actions": 50,
+  "dream_hard_actions": 70,
+  "rom": "rom_gbc/pokered.gbc",
+  "sym": "rom_gbc/pokered.sym"
+}

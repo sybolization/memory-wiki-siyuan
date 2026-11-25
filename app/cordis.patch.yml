@@ -1,0 +1,13 @@
+# Agent memory（@local/dsh-agent-memory）
+# 本 bundle 只插入一行 Host 插件；所有能力（工具 / 命令 / 注入 / dreaming）
+# 都由这一行内部的模块注册，方便整体开关与卸载。
+- insert:
+    - id: agent-memory
+      name: '@local/dsh-agent-memory'
+      config:
+        # 关闭后插件仍会加载，但除诊断外不做任何事（后续里程碑兑现）
+        enabled: true
+        # 留空 [] 表示全量；需要限制范围时填写本机项目根路径
+        dreamProjects: []
+        # /dream all 单次最多处理多少会话
+        dreamAllMax: 100

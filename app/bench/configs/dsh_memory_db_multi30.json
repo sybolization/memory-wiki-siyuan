@@ -1,0 +1,21 @@
+{
+  "system": {
+    "name": "dsh_memory",
+    "params": {
+      "model": "openai/deepseek-v4.1-flash",
+      "judge_model": "openai/deepseek-v4.1-flash",
+      "api_base": "https://opencode.ai/inference/go/v1",
+      "memory_enabled": true,
+      "keep_history": true
+    }
+  },
+  "task": {
+    "name": "database_exploration",
+    "params": {
+      "schedule": "multi_group"
+    }
+  },
+  "runs": 1,
+  "max_workers": 1,
+  "run_mode": "replicate"
+}

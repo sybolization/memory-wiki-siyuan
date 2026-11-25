@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Agent 记忆",
+    "description": "按会话沉淀记忆笔记，注入一份极小的索引，再用离线 dreaming 把笔记对照原始转录纠错、合并成跨工作区的 wiki。"
+  }
+}

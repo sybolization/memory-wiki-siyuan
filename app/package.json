@@ -1,0 +1,33 @@
+{
+  "name": "@local/dsh-agent-memory",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "description": "Agent memory for DeepSeek Harness: per-session memory notes, an injected index, and an offline dreaming pass that consolidates them into a cross-workspace wiki.",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "src",
+    "cordis.patch.yml",
+    "locale",
+    "icon.svg",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": []
+    }
+  }
+}
